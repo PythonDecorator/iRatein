@@ -9,4 +9,4 @@ exclude =
     ./venv,
     env,
 
-max-line-length = 120
+max-line-length = 100
