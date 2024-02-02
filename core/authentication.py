@@ -11,7 +11,6 @@ from django.contrib.auth import get_user_model
 class JWTAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
-        is_ambassador = True
 
         token = request.COOKIES.get('jwt')
 
@@ -24,10 +23,6 @@ class JWTAuthentication(BaseAuthentication):
 
             raise exceptions.AuthenticationFailed('unauthenticated')
 
-        if (is_ambassador and payload['scope'] != 'ambassador') or \
-                (not is_ambassador and payload['scope'] != 'admin'):
-            raise exceptions.AuthenticationFailed('Invalid Scope!')
-
         user = get_user_model().objects.get(pk=payload['user_id'])
 
         if user is None:
@@ -36,10 +31,9 @@ class JWTAuthentication(BaseAuthentication):
         return user, None
 
     @staticmethod
-    def generate_jwt(user_id, scope):
+    def generate_jwt(user_id):
         payload = {
             'user_id': user_id,
-            'scope': scope,
             'exp': timezone.now() + timezone.timedelta(days=1),
             'iat': timezone.now(),
         }

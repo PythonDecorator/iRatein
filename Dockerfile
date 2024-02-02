@@ -2,11 +2,13 @@ FROM python:3.9
 
 ENV PYTHONUNBUFFERED 1
 
-COPY requirements.txt /server/requirements.txt
+WORKDIR /app
 
-RUN pip install -r /server/requirements.txt
+COPY requirements.txt /app/requirements.txt
 
-COPY ./server /server
-WORKDIR /server
+RUN pip install -r /app/requirements.txt
+
+COPY . .
+
 EXPOSE 8000
 

@@ -9,8 +9,6 @@ app_name = 'user'
 
 urlpatterns = [
     path('register/', views.CreateUserView.as_view(), name='register'),
-    path('login/', views.LoginView.as_view(), name="login"),
-    path('logout/', views.LogoutAPIView.as_view(), name="logout"),
+    path('token/', views.CreateTokenView.as_view(), name='token'),
     path('profile/me/', views.ManageUserView.as_view(), name="me"),
-    path('all/', views.UsersAPIView.as_view(), name="users"),
 ]

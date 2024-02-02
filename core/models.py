@@ -8,6 +8,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
+from django.utils.text import slugify
 
 
 class UserManager(BaseUserManager):
@@ -49,7 +50,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_ambassador = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    username = None
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -70,3 +70,34 @@ class UserToken(models.Model):
     token = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     expired_at = models.DateTimeField()
+
+
+class ChatRoom(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True,
+                                related_name='room_creator')
+    room_name = models.CharField(max_length=50, unique=True)
+    members = models.ManyToManyField(User, related_name='rooms')
+    slug = models.SlugField(unique=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.room_name
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.slug = slugify(self.room_name)
+        super(ChatRoom, self).save()
+
+
+class Message(models.Model):
+    content = models.TextField()
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
+    room_name = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, null=True, related_name='messages')
+    time = models.TimeField(auto_now_add=True)
+    seen = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"To: {self.receiver} From: {self.sender}"
+
+    class Meta:
+        ordering = ('timestamp',)
