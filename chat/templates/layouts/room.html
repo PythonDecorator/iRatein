@@ -5,14 +5,25 @@
     <title>Chat Room</title>
 </head>
 <body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
-    {{ room_name|json_script:"room-name" }}
-    {{ user.email|json_script:"email" }}
+{% for message in objects %}
+    {% if message.sender == user %}
+    <h4>Me</h4>
+    <p>
+        {{ message.content }}
+    </p>
+    {% else %}
+    <h4>Others</h4>
+    <p>
+        {{ message.content }}
+    </p>
+    {% endif %}
+{% endfor %}
+<textarea id="chat-log" cols="100" rows="20"></textarea><br>
+<input id="chat-message-input" type="text" size="100"><br>
+<input id="chat-message-submit" type="button" value="Send">
+{{ room_name|json_script:"room-name" }}
 
-    <script>
-        const email = JSON.parse(document.getElementById('email').textContent);
+<script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
         const chatSocket = new WebSocket(
@@ -48,6 +59,6 @@
             }));
             messageInputDom.value = '';
         };
-    </script>
+</script>
 </body>
 </html>

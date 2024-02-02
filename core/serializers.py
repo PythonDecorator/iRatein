@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model, authenticate
 
 from rest_framework import serializers
 
-from core.models import Message, User
+from core.models import User
 
 from .models import Message, ChatRoom
 from collections import OrderedDict
@@ -14,7 +14,6 @@ from collections import OrderedDict
 
 class MessageSerializer(serializers.ModelSerializer):
     sender = serializers.SlugRelatedField(many=False, slug_field='name', queryset=User.objects.all())
-    receiver = serializers.SlugRelatedField(many=False, slug_field='name', queryset=User.objects.all())
 
     def to_representation(self, instance):
         # this function will remove keys that have None value
@@ -23,7 +22,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ['sender', 'receiver', 'content', 'timestamp']
+        fields = ['sender', 'content', 'timestamp']
 
 
 class ChatRoomSerializer(serializers.ModelSerializer):

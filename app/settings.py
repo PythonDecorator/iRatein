@@ -171,6 +171,6 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-LOGIN_URL = "core:login"
+LOGIN_URL = "chat:login"
 LOGIN_REDIRECT_URL = "chat:index"
-LOGOUT_REDIRECT_URL = "core:login"
+LOGOUT_REDIRECT_URL = "chat:login"

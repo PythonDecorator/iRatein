@@ -90,14 +90,19 @@ class ChatRoom(models.Model):
 class Message(models.Model):
     content = models.TextField()
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
     room_name = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, null=True, related_name='messages')
     time = models.TimeField(auto_now_add=True)
     seen = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"To: {self.receiver} From: {self.sender}"
+        return f"To: From: {self.sender}"
 
     class Meta:
         ordering = ('timestamp',)
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name='profile')
+    image = models.CharField(max_length=500, default="http://emilcarlsson.se/assets/mikeross.png")

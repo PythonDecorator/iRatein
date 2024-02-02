@@ -10,17 +10,13 @@ from core.models import User, ChatRoom, Message
 
 @database_sync_to_async
 def new_message_query(user, room_name, data):
-
-    print(user, room_name, data)
-    # sender = data.get("sender")
-    # receiver = data.get("receiver")
     user = User.objects.get(email=user.email)
     content = data.get("message")
     room_name, created = ChatRoom.objects.get_or_create(room_name=room_name)
     massage_model = Message.objects.create(sender=user,
-                                           receiver=user,
                                            content=content,
                                            room_name=room_name)
+    print(massage_model.sender)
     return massage_model
 
 
