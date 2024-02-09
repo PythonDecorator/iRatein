@@ -44,6 +44,10 @@ def login_view(request):
     return render(request, "authentications/login.html", context)
 
 
+def profile(request):
+    return render(request, "layouts/base.html")
+
+
 @login_required()
 def index(request):
     return render(request, "home/index.html")
@@ -53,6 +57,6 @@ def index(request):
 def room(request, room_name):
     messages_ = Message.objects.filter(room_name__room_name=room_name)[:10]
 
-    return render(request, "room.html",
+    return render(request, "home/room.html",
                   {"room_name": room_name,
                    "objects": messages_})
