@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+    image: pythondecorator/iratein:0.0.4
+    command: >
+      sh -c "python manage.py wait_for_db &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    environment:
+      DEBUG: 0
+
+#  redis:
+#    image: redis
+#    ports:
+#      - "6379:6379"

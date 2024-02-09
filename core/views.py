@@ -8,7 +8,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 
-from .models import UserToken  # noqa
+from .models import UserToken, User  # noqa
 from .serializers import UserSerializer, UserUpdateSerializer, AuthTokenSerializer
 
 
@@ -73,3 +73,12 @@ class ManageUserView(generics.RetrieveUpdateDestroyAPIView):
 
         else:
             return Response({"success": False, "details": serializer.errors})
+
+
+class AllUsers(generics.ListAPIView):
+    """Get all users."""
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
